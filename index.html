@@ -99,6 +99,28 @@ main{padding:0 12px calc(24px + var(--safe-bottom));display:flex;flex-direction:
 .cover-hero-v8 .cover-image-start:active{background:rgba(255,30,50,.10)}
 @media(max-width:480px){.cover-hero-v8{height:70dvh;min-height:380px}.cover-hero-v8 .cover-art{width:min(100%,46.6667dvh)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition:none!important}}
+
+/* V8 cover: original poster only; all printed controls have transparent hit areas. */
+.cover{position:fixed;inset:0;z-index:10;background:#030406;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.cover:before{content:"";position:absolute;inset:-24px;background:url("./assets/cover-v7.png") center/cover no-repeat;filter:blur(18px) brightness(.34) saturate(.75);transform:scale(1.06);}
+.cover:after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 18%,rgba(0,0,0,.56) 100%);}
+.cover-hero-v8{position:absolute;inset:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:transparent;z-index:1;}
+.cover-hero-v8:after{content:none;}
+.cover-hero-v8 .cover-art{position:relative;width:min(100vw,71.4286dvh,720px);aspect-ratio:1060 / 1484;height:auto;max-height:100dvh;flex:0 0 auto;overflow:hidden;isolation:isolate;margin:0 auto;}
+.cover-hero-v8 .cover-art>img{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:fill;object-position:center;filter:none;background:#030406;}
+.cover-hotspot{position:absolute;z-index:7;display:block;padding:0;margin:0;min-width:0;min-height:0;border:0;border-radius:14px;background:transparent;color:transparent;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;appearance:none;}
+.cover-hotspot:focus{outline:none;}
+.cover-hotspot:focus-visible{outline:3px solid rgba(255,76,91,.96);outline-offset:2px;background:rgba(255,22,46,.12);}
+.cover-hotspot:active{background:rgba(255,22,46,.16);}
+#coverSettings{left:3.5%;top:5.8%;width:8.5%;height:7.7%;border-radius:50%;}
+#coverSound{left:88.5%;top:5.5%;width:9.5%;height:8%;border-radius:50%;}
+#coverImageStart{left:24%;top:63.5%;width:53%;height:10%;border-radius:32px;}
+#coverAbout{left:25.5%;top:74.8%;width:23%;height:6.7%;border-radius:20px;}
+#coverInstructions{left:53%;top:74.8%;width:23.5%;height:6.7%;border-radius:20px;}
+.cover-body{display:none!important;}
+@media(max-height:620px){.cover-hero-v8 .cover-art{width:min(100vw,71.4286dvh,600px);}}
+@media(prefers-reduced-motion:reduce){.cover:before{filter:brightness(.34) saturate(.75);}}
+
 </style>
 </head>
 <body>
@@ -118,14 +140,17 @@ main{padding:0 12px calc(24px + var(--safe-bottom));display:flex;flex-direction:
 </div>
 <div class="flash" id="flash"></div><div class="noise" id="noise"></div>
 <div class="jumpscare" id="jump"><img src="./assets/doctor.jpg" alt="突然出現在照片裡的蒙面醫生"><span>他知道你在看</span></div>
-<section class="cover" id="cover">
-  <div class="cover-hero cover-hero-v8">
+<section class="cover" id="cover" aria-label="午夜禁區：食人醫生主選單">
+  <div class="cover-hero-v8">
     <div class="cover-art">
-      <img src="./assets/cover-v7.png" alt="午夜禁區：食人醫生電影式恐怖遊戲封面">
-      <button class="cover-image-start" id="coverImageStart" type="button" aria-label="點擊封面圖片上的開始遊戲按鈕，進入遊戲"></button>
+      <img src="./assets/cover-v7.png" alt="午夜禁區：食人醫生封面，開始遊戲、劇情簡介、遊戲說明、設定及音效圖示均可直接點擊">
+      <button class="cover-hotspot" id="coverSettings" type="button" aria-label="設定與存檔" title="設定與存檔"></button>
+      <button class="cover-hotspot" id="coverSound" type="button" aria-label="切換音效" aria-pressed="false" title="切換音效"></button>
+      <button class="cover-hotspot" id="coverImageStart" type="button" aria-label="開始遊戲或繼續案件" title="開始遊戲"></button>
+      <button class="cover-hotspot" id="coverAbout" type="button" aria-label="劇情簡介" title="劇情簡介"></button>
+      <button class="cover-hotspot" id="coverInstructions" type="button" aria-label="遊戲說明" title="遊戲說明"></button>
     </div>
   </div>
-  <div class="cover-body"><p class="warning">原創心理犯罪懸疑 · 電影式場景 · 多重結局<br>你收到妹妹失蹤十年後寄來的錄音帶。今晚，醫院會告訴你真相——或者替你編造一個。<br>含突發閃光及驚嚇畫面；音效可隨時關閉。</p><div class="cover-buttons"><button class="primary" id="startBtn">進入醫院　›</button><button class="tiny" id="aboutBtn">案件資料</button></div></div>
 </section>
 <div class="modal hidden" id="modal"><div class="modalbox"><h2 id="modalTitle">案件資料</h2><div id="modalContent"></div><button class="primary" id="modalClose">返回遊戲</button></div></div>
 <script src="./game.js"></script>

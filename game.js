@@ -308,31 +308,47 @@ function start(){
  state=initial();state.started=true;state.node="intro";state.line=0;state.visited.intro=true;
  $("cover").classList.add("hidden");render();persist();
 }
-$("startBtn").addEventListener("click",start);
-$("coverImageStart").addEventListener("click",start);
-$("continueBtn").addEventListener("click",advance);
-$("dialogue").addEventListener("click",advance);
-$("soundToggle").addEventListener("click",()=>{
- state.sound=!state.sound;$("soundToggle").textContent=state.sound?"♫ 音效：開":"♫ 音效：關";
- if(state.sound){playTone("static");}persist();
-});
-$("menuBtn").addEventListener("click",()=>{
- $("modalTitle").textContent="存檔／設定";
+function toggleSound(){
+ state.sound=!state.sound;
+ $("soundToggle").textContent=state.sound?"♫ 音效：開":"♫ 音效：關";
+ $("coverSound").setAttribute("aria-pressed",String(state.sound));
+ $("coverSound").setAttribute("aria-label",state.sound?"關閉音效":"開啟音效");
+ if(state.sound)playTone("static");
+ persist();
+}
+function openSettings(){
+ $("modalTitle").textContent="設定與存檔";
  const endings=JSON.parse(localStorage.getItem("mq-v8-endings")||localStorage.getItem("mq-v7-endings")||"[]");
- $("modalContent").innerHTML=`<p>進度會自動儲存在這部裝置的瀏覽器。清除瀏覽器資料可能會刪除存檔。</p><p>目前線索：${state.clues.length} 件｜決定：${state.steps} 次｜已解鎖結局：${endings.length} 種</p><p>提示：安靜、收集證據及尊重妹妹的選擇，可能開啟不同結局。音效只會在你開啟後播放。</p><button class="tiny" id="resetSave">刪除存檔並重新開始</button>`;
+ $("modalContent").innerHTML=`<p>進度會自動儲存在這部裝置的瀏覽器。清除瀏覽器資料可能會刪除存檔。</p><p>目前線索：${state.clues.length} 件｜決定：${state.steps} 次｜已解鎖結局：${endings.length} 種</p><p>音效目前：${state.sound?"開啟":"關閉"}。你可以點封面右上角喇叭圖示切換音效。</p><p>提示：安靜、收集證據及尊重妹妹的選擇，可能開啟不同結局。</p><button class="tiny" id="resetSave">刪除存檔並重新開始</button>`;
  $("modal").classList.remove("hidden");
  setTimeout(()=>{const r=$("resetSave");if(r)r.onclick=()=>{localStorage.removeItem("mq-v8-save");state=initial();state.started=true;state.node="intro";$("modal").classList.add("hidden");render();persist()}},0);
-});
-$("aboutBtn").addEventListener("click",()=>{
- $("modalTitle").textContent="案件資料 · 聖杜蘭醫院";
- $("modalContent").innerHTML="<p>十年前，一名病人從聖杜蘭醫院消失。官方紀錄聲稱她從未存在。</p><p>你是犯罪心理顧問林澈。妹妹林霏失蹤後，你收到一卷來自未來的錄音帶。院內醫生陳以安擅長利用記憶、暗示與愧疚操控病人；但他是否就是失蹤案的主謀，沒有人能確定。</p><p>本作為原創心理犯罪懸疑故事，並非任何電影的改編。遊戲包含閃光效果及突發驚嚇，可隨時關閉音效。</p>";
+}
+function openAbout(){
+ $("modalTitle").textContent="劇情簡介 · 聖杜蘭醫院";
+ $("modalContent").innerHTML="<p>十年前，一名病人從聖杜蘭醫院消失。官方紀錄聲稱她從未存在。</p><p>你是犯罪心理顧問林澈。妹妹林霏失蹤後，你收到一卷來自未來的錄音帶。院內醫生陳以安擅長利用記憶、暗示與愧疚操控病人；但他是否就是失蹤案的主謀，沒有人能確定。</p><p>本作為原創心理犯罪懸疑故事。每個決定都可能改變線索、警戒及結局；有些真相只有收集到關鍵證據才會解鎖。</p>";
  $("modal").classList.remove("hidden");
-});
+}
+function openInstructions(){
+ $("modalTitle").textContent="遊戲說明";
+ $("modalContent").innerHTML="<p><strong>閱讀對話：</strong>點對話區或「繼續」按鈕前進；打字中的句子點一下可以立即顯示全文，再點一下才前進。</p><p><strong>作出選擇：</strong>不同選擇會改變警戒程度、醫生距離、線索及人物關係，並可能導致不同結局。</p><p><strong>調查線索：</strong>留意病歷、照片、錄音及監視器。收集足夠線索可解鎖額外選項。</p><p><strong>恐怖效果：</strong>遊戲包含突發閃光與驚嚇畫面；可使用封面右上角喇叭圖示控制音效。</p><p><strong>存檔：</strong>進度會自動儲存在目前裝置的瀏覽器。清除網站資料可能刪除存檔。</p>";
+ $("modal").classList.remove("hidden");
+}
+$("coverImageStart").addEventListener("click",start);
+$("coverSettings").addEventListener("click",openSettings);
+$("coverSound").addEventListener("click",toggleSound);
+$("coverAbout").addEventListener("click",openAbout);
+$("coverInstructions").addEventListener("click",openInstructions);
+$("continueBtn").addEventListener("click",advance);
+$("dialogue").addEventListener("click",advance);
+$("soundToggle").addEventListener("click",toggleSound);
+$("menuBtn").addEventListener("click",openSettings);
 $("modalClose").addEventListener("click",()=>$("modal").classList.add("hidden"));
 $("modal").addEventListener("click",e=>{if(e.target===$("modal"))$("modal").classList.add("hidden")});
 if(loadSave()){
- $("cover").classList.remove("hidden");$("startBtn").textContent="繼續案件　›";
- $("startBtn").onclick=()=>{$("cover").classList.add("hidden");render()};
+ $("cover").classList.remove("hidden");
+ $("coverImageStart").setAttribute("aria-label","繼續已保存的案件進度");
+ $("coverSound").setAttribute("aria-pressed",String(state.sound));
+ $("coverSound").setAttribute("aria-label",state.sound?"關閉音效":"開啟音效");
  $("soundToggle").textContent=state.sound?"♫ 音效：開":"♫ 音效：關";
 }else{
  state=initial();
