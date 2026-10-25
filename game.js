@@ -195,7 +195,7 @@ function updateScene(key){
  const m=sceneMeta[key]||sceneMeta.ward;
  document.body.style.setProperty("--scene-bg", `url("${m[2]}")`);
  const im=$("sceneImage"); im.style.opacity="0";
- setTimeout(()=>{im.src=m[2];im.alt=m[0]+"場景";im.onload=()=>im.style.opacity="1";},100);
+ setTimeout(()=>{im.onload=()=>{im.style.opacity="1"};im.onerror=()=>{im.style.opacity="1"};im.src=m[2];im.alt=m[0]+"場景";if(im.complete&&im.naturalWidth>0)im.style.opacity="1";},120);
  $("sceneTitle").innerHTML=`${m[0]}<span class="scene-sub" id="sceneSub">${m[1]}</span>`;
  $("sceneLabel").textContent=m[3];
 }
@@ -227,8 +227,8 @@ function effect(kind){
   else playTone("static");
  }
 }
-function persist(){try{localStorage.setItem("mq-v7-save",JSON.stringify(state))}catch(e){}}
-function loadSave(){try{const s=JSON.parse(localStorage.getItem("mq-v7-save"));if(s&&s.started){state=s;restoredSave=true;return true}}catch(e){}return false}
+function persist(){try{localStorage.setItem("mq-v8-save",JSON.stringify(state))}catch(e){}}
+function loadSave(){try{const s=JSON.parse(localStorage.getItem("mq-v8-save")||localStorage.getItem("mq-v7-save"));if(s&&s.started){state=s;restoredSave=true;return true}}catch(e){}return false}
 function render(){
  updateStatus();
  const node=story[state.node];if(!node)return;
@@ -298,8 +298,8 @@ function choose(c){
  render();persist();
 }
 function restart(){
- const keepSound=state.sound, endings=JSON.parse(localStorage.getItem("mq-v7-endings")||"[]");
- if(state.ending&&!endings.includes(state.ending)){endings.push(state.ending);localStorage.setItem("mq-v7-endings",JSON.stringify(endings))}
+ const keepSound=state.sound, endings=JSON.parse(localStorage.getItem("mq-v8-endings")||"[]");
+ if(state.ending&&!endings.includes(state.ending)){endings.push(state.ending);localStorage.setItem("mq-v8-endings",JSON.stringify(endings))}
  state=initial();state.sound=keepSound;state.started=true;state.node="intro";state.visited.intro=true;
  $("cover").classList.add("hidden");render();persist();
 }
@@ -317,10 +317,10 @@ $("soundToggle").addEventListener("click",()=>{
 });
 $("menuBtn").addEventListener("click",()=>{
  $("modalTitle").textContent="存檔／設定";
- const endings=JSON.parse(localStorage.getItem("mq-v7-endings")||"[]");
+ const endings=JSON.parse(localStorage.getItem("mq-v8-endings")||localStorage.getItem("mq-v7-endings")||"[]");
  $("modalContent").innerHTML=`<p>進度會自動儲存在這部裝置的瀏覽器。清除瀏覽器資料可能會刪除存檔。</p><p>目前線索：${state.clues.length} 件｜決定：${state.steps} 次｜已解鎖結局：${endings.length} 種</p><p>提示：安靜、收集證據及尊重妹妹的選擇，可能開啟不同結局。音效只會在你開啟後播放。</p><button class="tiny" id="resetSave">刪除存檔並重新開始</button>`;
  $("modal").classList.remove("hidden");
- setTimeout(()=>{const r=$("resetSave");if(r)r.onclick=()=>{localStorage.removeItem("mq-v7-save");state=initial();state.started=true;state.node="intro";$("modal").classList.add("hidden");render();persist()}},0);
+ setTimeout(()=>{const r=$("resetSave");if(r)r.onclick=()=>{localStorage.removeItem("mq-v8-save");state=initial();state.started=true;state.node="intro";$("modal").classList.add("hidden");render();persist()}},0);
 });
 $("aboutBtn").addEventListener("click",()=>{
  $("modalTitle").textContent="案件資料 · 聖杜蘭醫院";

@@ -5,24 +5,38 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#08090c">
 <meta name="description" content="午夜禁區：食人醫生 — 原創心理恐怖文字選擇遊戲">
-<title>午夜禁區：食人醫生 V7</title>
+<title>午夜禁區：食人醫生 V8</title>
 <style>
 :root{--red:#d72b3c;--muted:#9da2ad;--panel:rgba(8,10,15,.91);--line:rgba(210,220,235,.15);--scene-bg:url("./assets/red-corridor.jpg")}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#050609;color:#f2f2f4;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif}
 body{min-height:100dvh;background:#050609;overflow-x:hidden;isolation:isolate}
 body:before{content:"";position:fixed;inset:0;z-index:-2;background-image:linear-gradient(180deg,rgba(3,5,8,.78),rgba(3,5,8,.91)),var(--scene-bg);background-size:cover;background-position:center;background-repeat:no-repeat;filter:saturate(.72);transform:scale(1.025)}
-body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at center,transparent 10%,rgba(0,0,0,.42) 100%)}
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at center,transparent 10%,rgba(0,0,0,.56) 100%)}
+:root{--safe-bottom:env(safe-area-inset-bottom,0px)}
+button,.choice{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 button{font:inherit;cursor:pointer}button:focus-visible{outline:2px solid #ff5b68;outline-offset:3px}
 #app{min-height:100dvh;display:flex;flex-direction:column;max-width:980px;margin:auto;position:relative}
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;gap:12px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.55);z-index:2}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:max(10px,env(safe-area-inset-top)) 14px 10px;gap:12px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(0,0,0,.84),rgba(0,0,0,.4));backdrop-filter:blur(12px);z-index:2;position:sticky;top:0}
+.brand{font-size:11px;letter-spacing:.14em}.tiny{min-height:40px}
 .brand{font-size:12px;letter-spacing:.18em;color:#e9e9ed}.brand b{color:#ff5362}.top-actions{display:flex;gap:8px}.tiny{background:#11151c;color:#d6d8de;border:1px solid #343945;border-radius:9px;padding:8px 10px;font-size:12px}
-.scene{position:relative;min-height:40vh;height:46vh;max-height:560px;background:#111;overflow:hidden}
+.scene{position:relative;min-height:42vh;height:49vh;max-height:650px;background:#111;overflow:hidden;box-shadow:0 18px 48px #0008}
+.scene img{animation:sceneDrift 18s ease-in-out infinite alternate;will-change:transform}
+@keyframes sceneDrift{from{transform:scale(1.015)}to{transform:scale(1.075) translate3d(-.5%,.5%,0)}}
 .scene img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;object-position:center 45%;filter:brightness(.7) contrast(1.08);transition:opacity .25s}
-.scene:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#08090c 0%,rgba(8,9,12,.18) 48%,rgba(0,0,0,.2) 100%);pointer-events:none}
+.scene:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(3,4,7,.96) 0%,rgba(3,4,7,.1) 50%,rgba(0,0,0,.25) 100%),linear-gradient(90deg,rgba(0,0,0,.25),transparent 45%,rgba(0,0,0,.12));pointer-events:none}
 .scene-label{position:absolute;left:16px;top:14px;z-index:1;font-size:10px;letter-spacing:.22em;color:#d6d7de;background:rgba(0,0,0,.45);padding:7px 9px;border-left:2px solid var(--red)}
 .scene-title{position:absolute;left:18px;bottom:22px;z-index:1;font-size:clamp(23px,5.6vw,42px);font-weight:850;letter-spacing:.06em;text-shadow:0 3px 20px #000}
 .scene-sub{display:block;font-size:11px;letter-spacing:.2em;color:#d1d1d6;font-weight:500;margin-top:6px}
-main{padding:0 14px 28px;display:flex;flex-direction:column;gap:12px;flex:1}
+main{padding:0 12px calc(24px + var(--safe-bottom));display:flex;flex-direction:column;gap:11px;flex:1;margin-top:-2px}
+.status{position:relative;z-index:1}
+.stat{backdrop-filter:blur(12px);background:rgba(7,10,15,.76);box-shadow:0 6px 22px #0004}
+.story-card{background:linear-gradient(125deg,rgba(5,7,11,.9),rgba(5,7,11,.8)),var(--scene-bg);background-size:cover;background-position:center;backdrop-filter:blur(10px);box-shadow:0 12px 35px #0007,inset 0 0 45px #0005}
+.story-head{font-size:10px}
+#dialogue{font-size:clamp(15px,3.9vw,17px);line-height:1.85;min-height:88px}
+.primary{min-height:44px}
+.choice{min-height:62px;backdrop-filter:blur(8px)}
+.choice b{font-size:14px}
+.choice small{font-size:12px}
 .status{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:2px}
 .stat{border:1px solid var(--line);background:rgba(15,18,25,.8);padding:9px 10px;border-radius:10px;min-width:0}
 .stat small{display:block;color:var(--muted);font-size:10px;letter-spacing:.08em;margin-bottom:5px}.stat strong{font-size:13px;font-weight:700}
@@ -51,7 +65,12 @@ main{padding:0 14px 28px;display:flex;flex-direction:column;gap:12px;flex:1}
 .jumpscare span{position:absolute;bottom:8%;color:#ff5967;font-weight:900;letter-spacing:.2em;text-shadow:0 0 14px red}
 @keyframes pop{0%{opacity:0}5%{opacity:1}12%{opacity:.08}19%{opacity:1}27%{opacity:0}43%{opacity:1}51%{opacity:0}70%{opacity:1}100%{opacity:0}}
 .cover{position:fixed;inset:0;z-index:10;background:#050609;display:flex;flex-direction:column;overflow:auto}
-.cover-hero-v7{height:min(77dvh,980px);min-height:400px;max-height:none;flex:0 0 auto;background:#030406}
+.cover-hero-v7,.cover-hero-v8{height:min(76dvh,920px);min-height:400px;max-height:none;flex:0 0 auto;background:#030406}
+.cover-hero-v8 img{object-fit:contain;object-position:center top;filter:none;background:#030406}
+.cover-hero-v8:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#050609 0%,transparent 17%,transparent 84%,rgba(0,0,0,.15))}
+.cover-body{padding-top:12px;padding-bottom:calc(20px + var(--safe-bottom))}
+.cover-buttons button{min-height:50px}
+.cover-body .warning{line-height:1.8}
 .cover-hero-v7 img{object-fit:contain;object-position:center top;filter:none;background:#030406}
 .cover-hero-v7:after{background:linear-gradient(0deg,#050609 0%,transparent 18%,transparent 84%,rgba(0,0,0,.12))}
 .cover-hero-v7 .cover-copy{display:none}
@@ -67,14 +86,16 @@ main{padding:0 14px 28px;display:flex;flex-direction:column;gap:12px;flex:1}
 .modal{position:fixed;inset:0;background:#000d;z-index:30;display:flex;align-items:center;justify-content:center;padding:18px}.modalbox{width:min(100%,520px);max-height:82dvh;overflow:auto;background:#0d1016;border:1px solid #3b414d;border-radius:15px;padding:20px}.modalbox h2{margin:0 0 12px;font-size:19px}.modalbox p,.modalbox li{font-size:13px;line-height:1.8;color:#c8cbd3}.modalbox button{margin-top:12px}
 @media(min-width:760px){.scene{height:54vh;min-height:420px}main{padding:0 22px 32px}.story-card{padding:22px}.choices{grid-template-columns:1fr 1fr}#dialogue{font-size:17px}.status{grid-template-columns:repeat(3,1fr)}}
 @media(max-height:700px){.scene{height:36vh;min-height:240px}.cover-hero{height:50vh;min-height:320px}.cover-hero-v7{height:66dvh;min-height:300px}}
-@media(min-width:760px){.cover{align-items:center;justify-content:center;background:#030406}.cover-hero-v7{width:min(100%,740px);height:min(78dvh,1000px);min-height:480px}.cover-body{width:min(100%,740px);padding-top:10px}.cover-body .warning{font-size:12px}}
-@media(max-width:420px){.cover-hero-v7{height:70dvh;min-height:380px}.cover-body{padding-left:6%;padding-right:6%}}
+@media(min-width:760px){.cover{align-items:center;justify-content:center;background:#030406}.cover-hero-v7,.cover-hero-v8{width:min(100%,740px);height:min(78dvh,1000px);min-height:480px}.cover-body{width:min(100%,740px);padding-top:10px}.cover-body .warning{font-size:12px}}
+@media(max-width:420px){.cover-hero-v7,.cover-hero-v8{height:70dvh;min-height:380px}.cover-body{padding-left:6%;padding-right:6%}}
+@media(max-width:420px){.scene{height:45vh;min-height:300px}.scene-title{font-size:25px}.scene-label{left:12px;top:12px}.status{gap:6px}.stat{padding:8px 7px}.stat strong{font-size:12px}.story-card{padding:14px 13px}.continue-row{gap:8px}.hint{font-size:10px}}
+@media(min-width:760px){#app{max-width:920px}.scene{border-radius:0 0 18px 18px}.topbar{padding-left:22px;padding-right:22px}main{padding-left:22px;padding-right:22px}.cover-hero-v8{width:min(100%,720px)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div id="app">
-  <header class="topbar"><div class="brand">MIDNIGHT <b>QUARANTINE</b> <span style="color:#6f7480">/ V7</span></div><div class="top-actions"><button class="tiny" id="soundToggle" aria-label="切換音效">♫ 音效：關</button><button class="tiny" id="menuBtn">存檔／設定</button></div></header>
+  <header class="topbar"><div class="brand">MIDNIGHT <b>QUARANTINE</b> <span style="color:#6f7480">/ V8</span></div><div class="top-actions"><button class="tiny" id="soundToggle" aria-label="切換音效">♫ 音效：關</button><button class="tiny" id="menuBtn">存檔／設定</button></div></header>
   <section class="scene"><img id="sceneImage" src="./assets/ward.jpg" alt="陰森的醫院場景"><div class="scene-label" id="sceneLabel">WARD 03 · 02:17 AM</div><div class="scene-title" id="sceneTitle">第三病房<span class="scene-sub" id="sceneSub">沒有登記的病人</span></div></section>
   <main>
     <section class="status" aria-label="角色狀態">
@@ -90,8 +111,8 @@ main{padding:0 14px 28px;display:flex;flex-direction:column;gap:12px;flex:1}
 <div class="flash" id="flash"></div><div class="noise" id="noise"></div>
 <div class="jumpscare" id="jump"><img src="./assets/doctor.jpg" alt="突然出現在照片裡的蒙面醫生"><span>他知道你在看</span></div>
 <section class="cover" id="cover">
-  <div class="cover-hero cover-hero-v7"><img src="./assets/cover-v7.png" alt="《午夜禁區：食人醫生》電影式恐怖遊戲封面"></div>
-  <div class="cover-body"><p class="warning">心理犯罪懸疑 · 文字選擇 · 多重結局<br>電影式圖片封面 · 場景圖片 · 心理攻防 · 多重結局<br>包含突發閃光與驚嚇畫面；音效可隨時關閉。</p><div class="cover-buttons"><button class="primary" id="startBtn">進入醫院　›</button><button class="tiny" id="aboutBtn">案件資料</button></div></div>
+  <div class="cover-hero cover-hero-v8"><img src="./assets/cover-v7.png" alt="午夜禁區：食人醫生電影式恐怖遊戲封面"></div>
+  <div class="cover-body"><p class="warning">原創心理犯罪懸疑 · 電影式場景 · 多重結局<br>你收到妹妹失蹤十年後寄來的錄音帶。今晚，醫院會告訴你真相——或者替你編造一個。<br>含突發閃光及驚嚇畫面；音效可隨時關閉。</p><div class="cover-buttons"><button class="primary" id="startBtn">進入醫院　›</button><button class="tiny" id="aboutBtn">案件資料</button></div></div>
 </section>
 <div class="modal hidden" id="modal"><div class="modalbox"><h2 id="modalTitle">案件資料</h2><div id="modalContent"></div><button class="primary" id="modalClose">返回遊戲</button></div></div>
 <script src="./game.js"></script>
