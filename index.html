@@ -90,6 +90,14 @@ main{padding:0 12px calc(24px + var(--safe-bottom));display:flex;flex-direction:
 @media(max-width:420px){.cover-hero-v7,.cover-hero-v8{height:70dvh;min-height:380px}.cover-body{padding-left:6%;padding-right:6%}}
 @media(max-width:420px){.scene{height:45vh;min-height:300px}.scene-title{font-size:25px}.scene-label{left:12px;top:12px}.status{gap:6px}.stat{padding:8px 7px}.stat strong{font-size:12px}.story-card{padding:14px 13px}.continue-row{gap:8px}.hint{font-size:10px}}
 @media(min-width:760px){#app{max-width:920px}.scene{border-radius:0 0 18px 18px}.topbar{padding-left:22px;padding-right:22px}main{padding-left:22px;padding-right:22px}.cover-hero-v8{width:min(100%,720px)}}
+/* Clickable hot spot precisely overlays the printed START button inside the cover artwork. */
+.cover-hero-v8{display:flex;justify-content:center;align-items:flex-start}
+.cover-hero-v8 .cover-art{position:relative;width:min(100%,52dvh,666px);height:auto;aspect-ratio:2 / 3;max-height:100%;margin:0 auto;flex:0 0 auto}
+.cover-hero-v8 .cover-art > img{display:block;position:relative;inset:auto;width:100%;height:100%;object-fit:fill;object-position:center top;filter:none;background:#030406}
+.cover-hero-v8 .cover-image-start{position:absolute;z-index:6;left:24%;top:61.4%;width:52%;height:10%;margin:0;padding:0;border:0;border-radius:28px;background:transparent;color:transparent;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.cover-hero-v8 .cover-image-start:focus-visible{outline:3px solid rgba(255,75,88,.95);outline-offset:3px;background:rgba(255,30,50,.12)}
+.cover-hero-v8 .cover-image-start:active{background:rgba(255,30,50,.10)}
+@media(max-width:480px){.cover-hero-v8{height:70dvh;min-height:380px}.cover-hero-v8 .cover-art{width:min(100%,46.6667dvh)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition:none!important}}
 </style>
 </head>
@@ -111,7 +119,12 @@ main{padding:0 12px calc(24px + var(--safe-bottom));display:flex;flex-direction:
 <div class="flash" id="flash"></div><div class="noise" id="noise"></div>
 <div class="jumpscare" id="jump"><img src="./assets/doctor.jpg" alt="突然出現在照片裡的蒙面醫生"><span>他知道你在看</span></div>
 <section class="cover" id="cover">
-  <div class="cover-hero cover-hero-v8"><img src="./assets/cover-v7.png" alt="午夜禁區：食人醫生電影式恐怖遊戲封面"></div>
+  <div class="cover-hero cover-hero-v8">
+    <div class="cover-art">
+      <img src="./assets/cover-v7.png" alt="午夜禁區：食人醫生電影式恐怖遊戲封面">
+      <button class="cover-image-start" id="coverImageStart" type="button" aria-label="點擊封面圖片上的開始遊戲按鈕，進入遊戲"></button>
+    </div>
+  </div>
   <div class="cover-body"><p class="warning">原創心理犯罪懸疑 · 電影式場景 · 多重結局<br>你收到妹妹失蹤十年後寄來的錄音帶。今晚，醫院會告訴你真相——或者替你編造一個。<br>含突發閃光及驚嚇畫面；音效可隨時關閉。</p><div class="cover-buttons"><button class="primary" id="startBtn">進入醫院　›</button><button class="tiny" id="aboutBtn">案件資料</button></div></div>
 </section>
 <div class="modal hidden" id="modal"><div class="modalbox"><h2 id="modalTitle">案件資料</h2><div id="modalContent"></div><button class="primary" id="modalClose">返回遊戲</button></div></div>

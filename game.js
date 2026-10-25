@@ -309,6 +309,7 @@ function start(){
  $("cover").classList.add("hidden");render();persist();
 }
 $("startBtn").addEventListener("click",start);
+$("coverImageStart").addEventListener("click",start);
 $("continueBtn").addEventListener("click",advance);
 $("dialogue").addEventListener("click",advance);
 $("soundToggle").addEventListener("click",()=>{
